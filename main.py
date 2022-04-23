@@ -1,5 +1,6 @@
 import json
 from distutils.util import strtobool
+import time
 
 file_choices = {
     'users': 'users.json',
@@ -14,13 +15,14 @@ class Search:
         self.search_parameters = inputs
         self.__search_result = self.__search
         if not self.__search_result:
-            print("No result found!")
+            print("No results found!")
         else:
             for record in self.__search_result:
                 record = self.__extend_record(record)
                 self.__show_record(record)
                 print("-" * 90)
             print(f"Hit count: {len(self.__search_result)}")
+        time.sleep(5)
 
     def __extend_record(self, record: dict) -> dict:
         if record.get('organization_id'):
@@ -118,7 +120,6 @@ def show_options(dictionary: dict) -> None:
 
 def main() -> None:
     while True:
-        print('\n\n')
         print("Welcome to Sohrab Search App.")
         print("Enter 'quit' whenever you want to quit the app.")
         search_parameters = {
@@ -129,7 +130,7 @@ def main() -> None:
         while not search_parameters.get('file'):
             print('\n\n')
             print("-----CHOOSING THE FILE-----")
-            print("Please press one of the options.")
+            print("Please press one of the options.\n")
             print("Options are:")
             show_options(file_choices)
             search_parameters['file'] = file_choices.get(input("Please select a file: "), None)
@@ -142,13 +143,14 @@ def main() -> None:
             print("Please press one of the options.")
             print("Options are:")
             show_options(max(search_parameters['file'], key=len))
-            search_parameters['key'] = input("Please enter a key: ")
+            search_parameters['key'] = input("Please enter a key:\n")
         if search_parameters['key'] == "quit":
             break
         while not search_parameters.get('value'):
             print('\n\n')
             print("-----ENTERING A VALUE TO SEARCH-----")
-            search_parameters['value'] = input("Please enter a Value to search: ")
+            print("Please enter a Value to search:")
+            search_parameters['value'] = input("(Enter 'is_empty' to search for empty values)\n")
         if search_parameters['value'] == "quit":
             break
         Search(search_parameters)
